@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Enrollee enrollee = null;
-    private static boolean enrolled = false;
+    private static boolean enrolled = true;
 
 
     public static void main(String[] args) {
@@ -44,6 +44,7 @@ public class Main {
                     System.out.println(e.getMessage());
                     scanner.nextLine();
                     ConsoleClear();
+                    DisplayLoginPage();
                 }
             }
             switch (option) {
@@ -149,6 +150,7 @@ public class Main {
                 System.out.println(e.getMessage());
                 scanner.nextLine();
                 ConsoleClear();
+                DisplayLobby();
             }
         }
         switch (option) {
@@ -204,6 +206,7 @@ public class Main {
                     System.out.println(e.getMessage());
                     scanner.nextLine();
                     ConsoleClear();
+                    EnrollPage();
                 }
             }
             switch (option) {
@@ -336,11 +339,12 @@ public class Main {
                     System.out.print("Please enter your option: ");
                     option = scanner.nextLine().trim();
                     if (!option.matches("[0-9]+")) {
-                        throw new IllegalArgumentException("Contact Number should only contain numbers, Please press ENTER to try again.");
+                        throw new IllegalArgumentException("Input should only contain numbers, Please press ENTER to try again.");
                     }
-                    else if (Integer.parseInt(option) < 0 && Integer.parseInt(option) > 14) {
+                    else if (Integer.parseInt(option) < 0 || Integer.parseInt(option) > 14) {
                         throw new IllegalArgumentException("Invalid input. Please press ENTER to try again");
                     }
+
                     else{
                         //exit loop
                         choosing = false;
@@ -349,6 +353,7 @@ public class Main {
                     System.out.println(e.getMessage());
                     scanner.nextLine();
                     ConsoleClear();
+                    EditStudentInfo();
                 }
             }
             switch (option) {
@@ -424,7 +429,7 @@ public class Main {
                 "███████╗   ██║   ██║   ██║██║  ██║█████╗  ██╔██╗ ██║   ██║       █████╗  █████╗  █████╗  ███████╗\n" +
                 "╚════██║   ██║   ██║   ██║██║  ██║██╔══╝  ██║╚██╗██║   ██║       ██╔══╝  ██╔══╝  ██╔══╝  ╚════██║\n" +
                 "███████║   ██║   ╚██████╔╝██████╔╝███████╗██║ ╚████║   ██║       ██║     ███████╗███████╗███████║\n" +
-                "╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚══════╝");
+                "╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚══════╝\n");
         String str = new StringBuilder()
                 .append(MainFeeStrFormat("Tuition Fee", enrollee.getTuitionFee()) + "\n")
                 .append("MISCELLANEOUS\n")
@@ -519,7 +524,7 @@ public class Main {
                         "███████╗   ██║   ██║   ██║██║  ██║█████╗  ██╔██╗ ██║   ██║       █████╗  █████╗  █████╗  ███████╗\n" +
                         "╚════██║   ██║   ██║   ██║██║  ██║██╔══╝  ██║╚██╗██║   ██║       ██╔══╝  ██╔══╝  ██╔══╝  ╚════██║\n" +
                         "███████║   ██║   ╚██████╔╝██████╔╝███████╗██║ ╚████║   ██║       ██║     ███████╗███████╗███████║\n" +
-                        "╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚══════╝")
+                        "╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚═╝     ╚══════╝╚══════╝╚══════╝\n")
                 .append(MainFeeStrFormat("[1] Tuition Fee", enrollee.getTuitionFee()) + "\n")
                 .append(MainFeeStrFormat("[2] Athletic Fee", enrollee.getAthleticFee()) + "\n")
                 .append(MainFeeStrFormat("[3] Computer Fee", enrollee.getComputerFee()) + "\n")
@@ -1211,14 +1216,15 @@ public class Main {
         }
         enrollee.setMotherContactNumber(motherContactNumber);
     }
+
     public static void ConsoleClear() {
         for(int i = 0; i <69; i++){
             System.out.println();
         }
-
 //        System.out.print("\033[H\033[2J");
 //        System.out.flush();
     }
+
     private static String MainFeeStrFormat(String str,int num){
         int trimmedLength = str.trim().length();
         for(int i = 0; i < str.length();i++){
@@ -1247,5 +1253,4 @@ public class Main {
         str += num;
         return str;
     }
-
 }
