@@ -96,25 +96,6 @@ class Enrollee extends EnrolleeData{
         }
         return temp;
     }
-    //Modify Data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //Student Fees
      private int tuitionFee = 2300;
      private int athleticFee = 200;

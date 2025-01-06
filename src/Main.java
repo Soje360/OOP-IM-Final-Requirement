@@ -4,7 +4,8 @@ import java.util.InputMismatchException;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Enrollee enrollee = null;
-    private static boolean enrolled = false;
+    private static String username;
+    private static String password;
 
 
     public static void main(String[] args) {
@@ -52,9 +53,9 @@ public class Main {
                     while(true){
                         ConsoleClear();
                         System.out.print("Username: ");
-                        String username = scanner.nextLine();
+                        username = scanner.nextLine();
                         System.out.print("Password: ");
-                        String password = scanner.nextLine();
+                        password = scanner.nextLine();
                         if(Account.LoginAccess(username,password)){
                             enrollee = Enrollee.EnrolleeData(username);
                             ConsoleClear();
@@ -77,7 +78,7 @@ public class Main {
                     break;
                 case "2":
                     while (true) {
-                        String username= "";
+                        username= "";
                         while (true){
                             ConsoleClear();
 
@@ -87,8 +88,8 @@ public class Main {
 
                                 if (username.isEmpty()) {
                                     System.out.println("Username cannot be empty!");
-                                } else if (username.length() != 5) {
-                                    System.out.println("Username must be exactly 5 characters long.");
+                                } else if (username.length() < 5) {
+                                    System.out.println("Username must be atleast 5 characters long.");
                                 } else {
                                     break;
                                 }
@@ -107,21 +108,20 @@ public class Main {
 
 
                         while(true){
-                            String password ="";
                             while (true) {
-                                System.out.print("Enter Password (8 characters): ");
+                                System.out.print("Enter Password: ");
                                 password = scanner.nextLine();
 
                                 if (password.isEmpty()) {
                                     System.out.println("Password cannot be empty!");
-                                } else if (password.length() != 8) {
-                                    System.out.println("Password must be exactly 8 characters long.");
+                                } else if (password.length() < 8) {
+                                    System.out.println("Password must be atleast 8 characters long.");
                                 } else {
                                     break;
                                 }
                             }
 
-                            String repassword = "";
+                            String repassword;
                             while (true) {
                                 System.out.print("Re-enter Password: ");
                                 repassword = scanner.nextLine();
@@ -245,7 +245,7 @@ public class Main {
             }
             switch (option) {
                 case "1":
-                    if(enrolled){
+                    if(Account.isEnrolled(username)){
                         System.out.println("You are already enrolled!\n" +
                                 "Press ENTER to continue");
                         scanner.nextLine();
@@ -294,7 +294,7 @@ public class Main {
             System.out.println("You are now enrolled! Please go to the enrollment page and see your Details.\n" +
                     "Press ENTER to continue");
             scanner.nextLine();
-            enrolled = true;
+            Account.setEnrolled(username);
         } else {
             System.out.println("English: " + enrollee.getEnglish() + "\nMath: " + enrollee.getMath() + "\nScience" + enrollee.getScience());
             System.out.println("Unfortunately, your general average in the three major subjects were not met. We might have to cancel your enrollment for now. \n" +
@@ -308,7 +308,7 @@ public class Main {
     //SHOWS AND LETS USERS EDIT THEIR INFORMATION IF THEIR ACCOUNT IS ENROLLED AND VERIFIED
     private static void EditStudentInfo() {
         ConsoleClear();
-        if (enrolled) {
+        if (Account.isEnrolled(username)) {
             ConsoleClear();
             System.out.println("███████╗████████╗██╗   ██╗██████╗ ███████╗███╗   ██╗████████╗    ██╗███╗   ██╗███████╗ ██████╗ ██████╗ ███╗   ███╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗\n" +
                     "██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔════╝████╗  ██║╚══██╔══╝    ██║████╗  ██║██╔════╝██╔═══██╗██╔══██╗████╗ ████║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║\n" +
@@ -494,7 +494,7 @@ public class Main {
                 .toString();
         System.out.println(str);
 
-        if(enrolled) {
+        if(Account.isEnrolled(username)) {
             System.out.println(
                     "Options:\n"
                             + "[1] Pay Fees\n"
@@ -1264,11 +1264,11 @@ public class Main {
     }
 
     public static void ConsoleClear() {
-        for(int i = 0; i <69; i++){
-            System.out.println();
-        }
-//        System.out.print("\033[H\033[2J");
-//        System.out.flush();
+//        for(int i = 0; i <69; i++){
+//            System.out.println();
+//        }
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     private static String MainFeeStrFormat(String str,int num){

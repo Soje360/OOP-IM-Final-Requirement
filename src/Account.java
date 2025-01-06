@@ -8,6 +8,7 @@ public class Account implements Accounts {
     private String username;
     private String password;
     private static List<Account> accounts = new  ArrayList<Account>();
+    private boolean enrolled = false;
 
 
     //sign up
@@ -16,6 +17,34 @@ public class Account implements Accounts {
             this.password = password;
             accounts.add(this);
     }
+    //enrolled
+    public static void setEnrolled(String username){
+        for(Account account: accounts){
+            if(account.username.equals(username)){
+                account.enrolled = true;
+                break;
+            }
+        }
+    }
+    public static boolean isEnrolled(String username){
+        boolean temp = false;
+        for(Account account: accounts){
+            if(account.username.equals(username)){
+                temp = account.enrolled ;
+                break;
+            }
+        }
+        return temp;
+    }
+
+
+
+
+
+
+
+
+
     //getter
     public String getUsername() {
         return username;
