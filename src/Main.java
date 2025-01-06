@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Enrollee enrollee = null;
-    private static boolean enrolled = true;
+    private static boolean enrolled = false;
 
 
     public static void main(String[] args) {
@@ -80,8 +80,21 @@ public class Main {
                         String username= "";
                         while (true){
                             ConsoleClear();
-                            System.out.print("Enter Username: ");
-                            username = scanner.nextLine();
+
+                            while (true) {
+                                System.out.print("Enter Username: ");
+                                username = scanner.nextLine();
+
+                                if (username.isEmpty()) {
+                                    System.out.println("Username cannot be empty!");
+                                } else if (username.length() != 5) {
+                                    System.out.println("Username must be exactly 5 characters long.");
+                                } else {
+                                    break;
+                                }
+
+                            }
+
                             if(Account.hasAccount(username)){
                                 System.out.println("Account already exists. Please try a different username.");
                                 System.out.println("Click enter to continue.");
@@ -92,12 +105,33 @@ public class Main {
                             }
                         }
 
-                        while(true){
-                            System.out.print("Enter Password: ");
-                            String password = scanner.nextLine();
 
-                            System.out.print("Re-enter Password: ");
-                            String repassword = scanner.nextLine();
+                        while(true){
+                            String password ="";
+                            while (true) {
+                                System.out.print("Enter Password (8 characters): ");
+                                password = scanner.nextLine();
+
+                                if (password.isEmpty()) {
+                                    System.out.println("Password cannot be empty!");
+                                } else if (password.length() != 8) {
+                                    System.out.println("Password must be exactly 8 characters long.");
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            String repassword = "";
+                            while (true) {
+                                System.out.print("Re-enter Password: ");
+                                repassword = scanner.nextLine();
+
+                                if (!password.equals(repassword)) {
+                                    System.out.println("Passwords do not match. Please try again.");
+                                } else {
+                                    break;
+                                }
+                            }
 
                             if (password.equals(repassword)) {
                                 Account account = new Account(username,password);
@@ -344,7 +378,6 @@ public class Main {
                     else if (Integer.parseInt(option) < 0 || Integer.parseInt(option) > 14) {
                         throw new IllegalArgumentException("Invalid input. Please press ENTER to try again");
                     }
-
                     else{
                         //exit loop
                         choosing = false;
@@ -468,40 +501,44 @@ public class Main {
                             + "[2] Check Balance\n"
                             + "[3] Exit\n"
             );
-            int action = 0;
+            String action = "";
             boolean onChoosing = true;
             while(onChoosing){
-                while (true) {
                     try {
                         System.out.print("Choose an action: ");
-                        action = scanner.nextInt();
-                        if (action > 0 && action < 4) {
-                            break;
-                        } else {
-                            System.out.println("Input not in choices!");
+                        action = scanner.nextLine().trim();
+                        if (Integer.parseInt(action) < 0 || Integer.parseInt(action) > 4) {
+                            throw new IllegalArgumentException("Invalid input. Please press ENTER to try again");
                         }
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Invalid Input!");
-                        break;
+                        else if (!action.matches("[0-9]+")) {
+                            throw new IllegalArgumentException("Input should only contain numbers, Please press ENTER to try again.");
+                        }
+                        else {
+                            onChoosing = false;
+                        }
                     }
-                }
-                switch (action) {
-                    case 1:
-                        onChoosing = false;
-                        PayFees();
-                        break;
-                    case 2:
-                        onChoosing = false;
-                        CheckBalance();
-                        break;
-                    case 3:
-                        //exit (exitwhile loop)
+                    catch (Exception e) {
+                        System.out.println("Wrong input. Please press ENTER to try again.");
+                        scanner.nextLine();
                         ConsoleClear();
-                        onChoosing = false;
-                        DisplayLobby();
-                        break;
-                }
+                        DisplayFees();
+                    }
+            }
+            switch (action) {
+                case "1":
+                    onChoosing = false;
+                    PayFees();
+                    break;
+                case "2":
+                    onChoosing = false;
+                    CheckBalance();
+                    break;
+                case "3":
+                    //exit (exitwhile loop)
+                    ConsoleClear();
+                    onChoosing = false;
+                    DisplayLobby();
+                    break;
             }
         }
         else{
@@ -567,7 +604,8 @@ public class Main {
                         System.out.println("Amount exceeds tuition fee!");
                     }
                     else if(pay == enrollee.getTuitionFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -589,7 +627,8 @@ public class Main {
                         System.out.println("Amount exceeds athletic fee!");
                     }
                     else if(pay == enrollee.getAthleticFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -611,7 +650,8 @@ public class Main {
                         System.out.println("Amount exceeds computer fee!");
                     }
                     else if(pay == enrollee.getComputerFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -632,7 +672,8 @@ public class Main {
                         System.out.println("Amount exceeds cultural fee!");
                     }
                     else if(pay == enrollee.getCulturalFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -650,10 +691,11 @@ public class Main {
                 while(true){
                     pay = input.nextInt();
                     if(pay > enrollee.getDevelopmentFee()){
-                        System.out.println("Amount exceeds developtment fee!");
+                        System.out.println("Amount exceeds development fee!");
                     }
                     else if(pay == enrollee.getDevelopmentFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -674,7 +716,8 @@ public class Main {
                         System.out.println("Amount exceeds guidance fee!");
                     }
                     else if(pay == enrollee.getGuidanceFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -695,7 +738,8 @@ public class Main {
                         System.out.println("Amount exceeds library fee!");
                     }
                     else if(pay == enrollee.getLibraryFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -716,7 +760,8 @@ public class Main {
                         System.out.println("Amount exceeds medical fee!");
                     }
                     else if(pay == enrollee.getMedicalAndDentalFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
@@ -737,7 +782,8 @@ public class Main {
                         System.out.println("Amount exceeds registration fee!");
                     }
                     else if(pay == enrollee.getRegistrationFee()){
-                        System.out.println("Amount fully paid! Thank you!");
+                        System.out.println("Amount fully paid! Thank you!, please press ENTER to refresh the fees again.");
+                        input.nextLine();
                         break;
                     }
                     else if(pay < 0){
